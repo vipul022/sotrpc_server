@@ -39,7 +39,7 @@ router.get("/:id", userAuthenticated, isOwnUserOrAdmin, getUser);
 // router.get("/:id", getUser);
 
 //edit a user
-router.put("/:id", userAuthenticated, isOwnUserOrAdmin, editUser); // ***change to this route AFTER creating first admin account and for rest of production
-// router.put("/:id", editUser); // *** Change to this route to create the first admin account when setting up
+// router.put("/:id", userAuthenticated, isOwnUserOrAdmin, editUser); // ***change to this route AFTER creating first admin account and for rest of production
+router.put("/:id", editUser); // *** Change to this route to create the first admin account when setting up
 
 module.exports = router;
