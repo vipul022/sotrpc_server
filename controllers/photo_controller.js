@@ -105,10 +105,11 @@ function deletePhoto(req, res) {
       //prepare correct params
       var params = {
         Bucket: S3_BUCKET,
-        Key: fileName,
+        Key: `photos/${fileName}`,
       };
       //request deletion from S3
       s3.deleteObject(params, function (err, data) {
+        console.log("params=> ", params, "data=> ", data, "err=> ",err);
         if (err) {
           res.status(404);
           res.json({
