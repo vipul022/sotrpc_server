@@ -4,8 +4,9 @@
   "description": "South of the River Potters Club Backend Server",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "test": "mocha"
+    "start": "node app.js",
+    "test": "mocha",
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
