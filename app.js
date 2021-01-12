@@ -10,7 +10,7 @@ const passport = require("passport");
 const aws = require('aws-sdk');
 require('dotenv').config();
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 const app = express();
 
