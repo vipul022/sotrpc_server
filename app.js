@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-const whitelist = ["https://southoftheriverpottersclub.herokuapp.com/", "http://localhost:3001", "http://localhost:3000"]
+const whitelist = ["https://southoftheriverpottersclub.herokuapp.com/", "https://sotrpc-server.herokuapp.com/", "http://localhost:3001", "http://localhost:3000"]
 app.use(cors({
     credentials: true,
     origin: function (origin, callback) {
