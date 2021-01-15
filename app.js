@@ -35,7 +35,6 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
       expires: 3600000,
-      sameSite: 'strict'
     },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
