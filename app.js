@@ -30,13 +30,13 @@ app.use(cors({
 
 // Session storage
 app.use(session({
-    secret: process.env.SESSIONSECRET,
+    secret: "This better work, Vader",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       expires: 3600000,
-      sameSite: 'none',
-      secure: true,
+      // sameSite: 'none',
+      // secure: true,
     },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
