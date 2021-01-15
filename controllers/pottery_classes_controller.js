@@ -6,8 +6,8 @@ const {
   editClassFromDB,
 } = require("../utils/pottery_classes_utilities");
 
+// Add a new pottery class to the DB
 const addClass = function (req, res) {
-  console.log("inside addClass=>");
   addClassToDB(req).save((err, pottery_class) => {
     if (err) {
       res.status(500);
@@ -20,6 +20,7 @@ const addClass = function (req, res) {
   });
 };
 
+// Get all Classes from the DB
 function getClasses(req, res) {
   getClassesFromDB().exec((err, classes) => {
     if (err) {
@@ -34,8 +35,8 @@ function getClasses(req, res) {
   });
 }
 
+// Delete one class from the DB
 function deleteClass(req, res) {
-  console.log("req.params.id->", req.params.id);
   deleteClassFromDB(req.params.id).exec((err) => {
     if (err) {
       res.status(500);
@@ -47,6 +48,7 @@ function deleteClass(req, res) {
   });
 }
 
+// Get a single class from the DB
 function getClass(req, res) {
   getClassFromDB(req.params.id).exec((err, pottery_class) => {
     if (err) {
@@ -61,8 +63,8 @@ function getClass(req, res) {
   });
 }
 
+// Update a single class from the DB
 function editClass(req, res) {
-  console.log("req inside editClass=>", req)
   editClassFromDB(req).exec((err, pottery_class) => {
     if (err) {
       res.status(500);

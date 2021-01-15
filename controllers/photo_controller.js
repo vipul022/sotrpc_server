@@ -1,5 +1,6 @@
 var aws = require("aws-sdk");
-require("dotenv").config(); // Configure dotenv to load in the .env file// Configure aws with your accessKeyId and your secretAccessKey
+// Configure dotenv to load in the .env file
+require("dotenv").config(); 
 const S3_BUCKET = process.env.Bucket;
 
 const {
@@ -10,16 +11,14 @@ const {
 } = require("../utils/photo_utilities");
 
 const addPhoto = function (req, res) {
-  console.log("req inside addPhoto=>", req.body);
-  const s3 = new aws.S3();
+  const s3 = new aws.S3(); 
   const fileName = req.body.fileName;
   const fileType = req.body.fileType;
 
-  console.log("S3_BUCKET=>", S3_BUCKET);
   // Set up the payload of what we are sending to the S3 api
   const s3Params = {
     Bucket: S3_BUCKET,
-    Key: `photos/${fileName}`,
+    Key: `photos/${fileName}`, // all photos to be stored in S3 photos folder
     Expires: 500,
     ContentType: fileType,
     ACL: "public-read",
@@ -38,10 +37,8 @@ const addPhoto = function (req, res) {
       signedRequest: data,
       url: `https://${S3_BUCKET}.s3.amazonaws.com/photos/${fileName}`,
     };
-    console.log("returnData=>", returnData);
     // save to db with URL of final image
     req.body.url = returnData.url;
-    console.log("req.body.url=>", req.body.url);
     addPhotoToDB(req).save((err, photo) => {
       if (err) {
         res.status(500);
@@ -50,7 +47,6 @@ const addPhoto = function (req, res) {
           error: err.message,
         });
       }
-      console.log("saving photo to DB:", photo);
 
       // Send it all back
       res.json({
@@ -65,6 +61,7 @@ const addPhoto = function (req, res) {
   });
 };
 
+//get all photos in the DB for the Gallery
 function getPhotos(req, res) {
   getPhotosFromDB().exec((err, photos) => {
     if (err) {
@@ -92,24 +89,17 @@ function deletePhoto(req, res) {
         error: "Photo for deletion not found in DB",
       });
     } else {
-      console.log("found photo for deletion, commencing S3 deletion");
       const fileName = photo.fileName;
 
       //delete from S3
-
-      //Substantiate authority
-      const s3 = new aws.S3({
-        accessKeyId: process.env.AWSAccessKeyId,
-        secretAccessKey: process.env.AWSSecretKey,
-      });
+      const s3 = new aws.S3();
       //prepare correct params
-      var params = {
+      var S3params = {
         Bucket: S3_BUCKET,
         Key: `photos/${fileName}`,
       };
       //request deletion from S3
-      s3.deleteObject(params, function (err, data) {
-        console.log("params=> ", params, "data=> ", data, "err=> ",err);
+      s3.deleteObject(S3params, function (err, data) {
         if (err) {
           res.status(404);
           res.json({
@@ -117,7 +107,6 @@ function deletePhoto(req, res) {
             error: err.message,
           });
         } else {
-          console.log(`deleted photo ${fileName} from S3`);
 
           //finally, remove photo record from DB
           deletePhotoFromDB(req.params.id).exec((err) => {
@@ -129,7 +118,6 @@ function deletePhoto(req, res) {
                 error: err.message,
               });
             }
-            console.log(`deleted ${fileName} from DB`);
             res.status(204);
             res.json({
               deleteFromS3Success: true,
@@ -142,6 +130,7 @@ function deletePhoto(req, res) {
   });
 }
 
+//get a single photo from the DB
 function getPhoto(req, res) {
   getPhotoFromDB(req.params.id).exec((err, photo) => {
     if (err) {

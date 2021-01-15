@@ -2,7 +2,6 @@ const passport = require("passport");
 const User = require("../models/user");
 
 const {
-  userExists,
   addUserToDB,
   getUserFromDB,
   deleteUserFromDB,
@@ -12,32 +11,29 @@ const {
 
 const logoutUser = function (req, res) {
   req.session.destroy(() => {
-    console.log("logged out user");
-    console.log("session object:", req.session);
-    console.log("req.user:", req.user);
     res.sendStatus(200);
   });
 };
 
-// helper functions
+// Helper functions
 const authenticate = passport.authenticate("local");
 
+// Login user
 async function loginUser(req, res, next) {
-  console.log("in loginUser");
   // passport.authenticate returns a function that we will call with req, res, and a callback function to execute on success
   const loginFunc = passport.authenticate("local");
-  // console.log(req.user)
   await loginFunc(req, res, next);
 }
 
+// Send user
 function sendUser(req, res) {
-  console.log(req.user);
   res.json({
     user: req.user,
     sessionID: req.sessionID,
   });
 }
 
+// Get all users
 function getUsers(req, res) {
   getUsersFromDB(req).exec((err, users) => {
     if (err) {
@@ -52,6 +48,7 @@ function getUsers(req, res) {
   });
 }
 
+// Add a single user
 function addUser(req, res) {
   addUserToDB(req).save((err, user) => {
     if (err) {
@@ -61,16 +58,15 @@ function addUser(req, res) {
       });
     }
     //after creating the user, login the user
-    console.log("finished add user, logging in");
     req.login(user, (err) => {
       if (err) {
-        console.log(err);
         res.send(err);
       } else sendUser(req, res);
     });
   });
 }
 
+// Delete user
 function deleteUser(req, res) {
   deleteUserFromDB(req.params.id).exec((err) => {
     if (err) {
@@ -83,6 +79,7 @@ function deleteUser(req, res) {
   });
 }
 
+// Get a single user
 function getUser(req, res) {
   getUserFromDB(req.params.id).exec((err, user) => {
     if (err) {
@@ -116,6 +113,7 @@ const authToChange = async function (req) {
   }
 };
 
+// Edit user details
 async function editUser(req, res) {
   if (await authToChange(req)) {
     editUserFromDB(req).exec((err, user) => {

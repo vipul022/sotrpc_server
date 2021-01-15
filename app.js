@@ -10,14 +10,13 @@ const passport = require("passport");
 const aws = require('aws-sdk');
 require('dotenv').config();
 
-const port = process.env.PORT || 3001;
-
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+// Cors
 const whitelist = ["https://southoftheriverpottersclub.herokuapp.com/", "https://sotrpc-server.herokuapp.com/", "http://localhost:3001", "http://localhost:3000"]
 app.use(cors({
     credentials: true,
@@ -29,6 +28,7 @@ app.use(cors({
   })
 );
 
+// Session storage
 app.use(session({
     secret: process.env.SESSIONSECRET,
     resave: false,
@@ -63,15 +63,12 @@ app.use(passport.session());
 require("./config/passport");
 
 // S3 initialize
-
 aws.config.update({
   region: 'ap-southeast-2', // Put your aws region here
+  // Configure aws with your accessKeyId and your secretAccessKey
   accessKeyId: process.env.AWSAccessKeyId,
   secretAccessKey: process.env.AWSSecretKey
 })
-
-
-
 
 //Routes
 app.use("/users", userRouter);
@@ -83,7 +80,8 @@ app.get("/", (req, res) => {
     res.send("Welcome")
 })
 
-
+// Port
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`SOTRPC app listening on port ${port}`)
 })

@@ -2,10 +2,11 @@ const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const User = require('../models/user')
 
+// compacts user down to userid for the session
 passport.serializeUser((user, done) => {
     done(null, user._id)
 })
-
+// uncompacts user from the id in the session
 passport.deserializeUser((userId, done) => {
     User.findById(userId)
     .then((user) => done(null, user))
@@ -32,6 +33,8 @@ const verifyCallback = (email, password, done) => {
     .catch(done)
 }
 
-const fields = {usernameField: "email"}
 
+
+//passport middleware configuration
+const fields = {usernameField: "email"} // using email as username for passport
 passport.use(new LocalStrategy(fields, verifyCallback))
