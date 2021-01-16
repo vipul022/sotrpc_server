@@ -30,9 +30,9 @@ app.use(cors({
 
 // Session storage
 app.use(session({
-    secret: "This better work, Vader",
+    secret: process.env.SESSIONSECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       expires: 3600000,
       // sameSite: 'none',
