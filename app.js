@@ -32,7 +32,7 @@ app.use(cors({
 // Session storage
 
 app.enable('trust proxy');
-app.use(express.session({
+app.use(session({
     secret: process.env.SESSIONSECRET,
     proxy: true,
     cookie: {
