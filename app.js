@@ -36,9 +36,10 @@ app.use(express.session({
     secret: process.env.SESSIONSECRET,
     proxy: true,
     cookie: {
-        secure: true,
-        sameSite: 'none',
-        httpOnly: false
+      expires: 3600000,
+      secure: true,
+      sameSite: 'none',
+      httpOnly: false
     },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
