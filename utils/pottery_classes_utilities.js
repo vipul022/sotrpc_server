@@ -13,7 +13,6 @@ function getClassesFromDB() {
 }
 
 function editClassFromDB(req) {
-  console.log("req inside editClassFromDB=>", req.params.id);
   return PotteryClass.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
