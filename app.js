@@ -7,8 +7,9 @@ const classRouter = require("./routes/pottery_classes_routes");
 const photoRouter = require("./routes/photo_routes");
 const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
-const aws = require("aws-sdk");
-require("dotenv").config();
+
+const aws = require('aws-sdk');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
@@ -19,14 +20,8 @@ app.use(
 );
 
 // Cors
-const whitelist = [
-  "https://southoftheriverpottersclub.herokuapp.com/",
-  "https://sotrpc-server.herokuapp.com/",
-  "http://localhost:3001",
-  "http://localhost:3000",
-];
-app.use(
-  cors({
+const whitelist = ["https://southoftheriverpottersclub.herokuapp.com", "http://localhost:3001", "http://localhost:3000"]
+app.use(cors({
     credentials: true,
     origin: function (origin, callback) {
       // Check each url in whitelist and see if it includes the origin (instead of matching exact string)
@@ -37,19 +32,35 @@ app.use(
 );
 
 // Session storage
-app.use(
-  session({
+
+app.enable('trust proxy');
+app.use(session({
     secret: process.env.SESSIONSECRET,
-    resave: false,
-    saveUninitialized: false,
+    proxy: true,
     cookie: {
       expires: 3600000,
+      secure: true,
+      sameSite: 'none',
+      httpOnly: false
     },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
     }),
-  })
-);
+}));
+// app.use(session({
+//     secret: process.env.SESSIONSECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       expires: 3600000,
+//       // sameSite: 'none',
+//       // secure: true,
+//     },
+//     store: new MongoStore({
+//       mongooseConnection: mongoose.connection,
+//     }),
+//   })
+// );
 
 // Database connection
 const dbConn = process.env.MONGODB_URI || "mongodb://localhost/SOTRPC";

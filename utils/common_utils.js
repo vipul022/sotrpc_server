@@ -30,7 +30,9 @@ const isOwnUserOrAdmin = function (req, res, next) {
 
 // Check to see if user is logged in
 const userAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) {
+  // const isAuthenticated = req.isAuthenticated();
+  // if (req.isAuthenticated()) {
+  if (req.user) {
     next();
   } else {
     res.send(403, { error: "Not authorised." });

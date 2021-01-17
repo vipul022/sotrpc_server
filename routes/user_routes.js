@@ -25,6 +25,7 @@ router.get("/logout", logoutUser);
 
 //show all users (admin only)
 router.get("/", userAuthenticated, isAdmin, getUsers);
+// router.get("/", userAuthenticated, getUsers);
 
 //add a new user
 router.post("/", emailNotExist, addUser);
