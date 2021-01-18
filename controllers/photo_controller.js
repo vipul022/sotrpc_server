@@ -26,7 +26,6 @@ const addPhoto = function (req, res) {
   // Make a request to the S3 API to get a signed URL which we can use to upload our file
   s3.getSignedUrl("putObject", s3Params, (err, data) => {
     if (err) {
-      console.log(err);
       res.json({
         signedURLSuccess: false,
         error: err,
@@ -65,10 +64,7 @@ const addPhoto = function (req, res) {
 function getPhotos(req, res) {
   getPhotosFromDB().exec((err, photos) => {
     if (err) {
-      res.status(404);
-      res.json({
-        error: err.message,
-      });
+      res.status(500).send();
     } else {
       res.status(200);
       res.send(photos);
@@ -80,10 +76,7 @@ function deletePhoto(req, res) {
   // get the filename from the db
   getPhotoFromDB(req.params.id).exec((err, photo) => {
     if (err) {
-      res.status(404);
-      res.json({
-        error: err.message,
-      });
+      res.status(404).send();
     } else if (!photo) {
       res.status(404).send({
         error: "Photo for deletion not found in DB",

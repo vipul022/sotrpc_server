@@ -10,13 +10,11 @@ const {
 const addClass = function (req, res) {
   addClassToDB(req).save((err, pottery_class) => {
     if (err) {
-      res.status(500);
-      res.json({
-        error: err.message,
-      });
+      res.status(500).send();
+    } else {
+      res.status(201);
+      res.send(pottery_class);
     }
-    res.status(201);
-    res.send(pottery_class);
   });
 };
 
@@ -24,10 +22,7 @@ const addClass = function (req, res) {
 function getClasses(req, res) {
   getClassesFromDB().exec((err, classes) => {
     if (err) {
-      res.status(404);
-      res.json({
-        error: err.message,
-      });
+      res.status(404).send();
     } else {
       res.status(200);
       res.send(classes);
@@ -39,12 +34,10 @@ function getClasses(req, res) {
 function deleteClass(req, res) {
   deleteClassFromDB(req.params.id).exec((err) => {
     if (err) {
-      res.status(500);
-      res.json({
-        error: err.message,
-      });
+      res.status(500).send();
+    } else {
+      res.sendStatus(204);
     }
-    res.sendStatus(204);
   });
 }
 
@@ -52,10 +45,7 @@ function deleteClass(req, res) {
 function getClass(req, res) {
   getClassFromDB(req.params.id).exec((err, pottery_class) => {
     if (err) {
-      res.status(404);
-      res.json({
-        error: err.message,
-      });
+      res.status(404).send();
     } else {
       res.status(200);
       res.send(pottery_class);
@@ -67,10 +57,7 @@ function getClass(req, res) {
 function editClass(req, res) {
   editClassFromDB(req).exec((err, pottery_class) => {
     if (err) {
-      res.status(500);
-      res.json({
-        error: err.message,
-      });
+      res.status(500).send();
     } else {
       res.status(200);
       res.send(pottery_class);
