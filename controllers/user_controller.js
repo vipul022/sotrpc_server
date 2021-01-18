@@ -37,10 +37,7 @@ function sendUser(req, res) {
 function getUsers(req, res) {
   getUsersFromDB(req).exec((err, users) => {
     if (err) {
-      res.status(404);
-      res.json({
-        error: err.message,
-      });
+      res.status(404).send();
     } else {
       res.status(200);
       res.send(users);
