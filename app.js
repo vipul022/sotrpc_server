@@ -32,35 +32,27 @@ app.use(cors({
 );
 
 // Session storage
-
+// following session settings are good for development
+const sessionConfig = {
+  secret: process.env.SESSIONSECRET,
+  resave: false,
+  saveUninitialized: false,
+  proxy: true,
+  cookie: {
+    expires: 3600000,
+    httpOnly: false
+  },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+  }),
+}
+// for production, cookie needs 2 more settings
+if (process.env.ENVIRONMENT!=="development") {
+  sessionConfig.cookie.secure = true;
+  sessionConfig.cookie.sameSite = "none";
+}
 app.enable('trust proxy');
-app.use(session({
-    secret: process.env.SESSIONSECRET,
-    proxy: true,
-    cookie: {
-      expires: 3600000,
-      secure: true,
-      sameSite: 'none',
-      httpOnly: false
-    },
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-    }),
-}));
-// app.use(session({
-//     secret: process.env.SESSIONSECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       expires: 3600000,
-//       // sameSite: 'none',
-//       // secure: true,
-//     },
-//     store: new MongoStore({
-//       mongooseConnection: mongoose.connection,
-//     }),
-//   })
-// );
+app.use(session(sessionConfig));
 
 // Database connection
 const dbConn = process.env.MONGODB_URI || "mongodb://localhost/SOTRPC";
